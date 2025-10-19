@@ -610,6 +610,83 @@
                 width: 100%;
             }
         }
+
+        /* iPhone SE and small screens optimization */
+        @media (max-width: 375px) {
+            /* Disable heavy animations on small screens */
+            body {
+                animation: none;
+            }
+            
+            body::before,
+            body::after {
+                animation: none;
+                opacity: 0.3;
+            }
+            
+            /* Reduce floating elements */
+            .sparkle,
+            .floating-heart,
+            .floating-star,
+            .floating-diamond,
+            .floating-flower,
+            .floating-butterfly {
+                display: none;
+            }
+            
+            /* Optimize container */
+            .container {
+                height: 100vh;
+            }
+            
+            .container svg {
+                width: 80%;
+                height: 60%;
+            }
+            
+            #text-click {
+                font-size: 28px !important;
+                top: 80% !important;
+            }
+            
+            /* Optimize popup */
+            .popup-content {
+                padding: 20px 15px;
+                margin: 5px;
+            }
+            
+            .popup-content h3 {
+                font-size: 20px;
+            }
+            
+            .popup-content p {
+                font-size: 14px;
+            }
+            
+            .popup-icon {
+                font-size: 40px;
+            }
+            
+            /* Optimize letter form */
+            .boxLetter .formLetter {
+                width: 95%;
+                height: 85%;
+                padding: 15px 10px;
+            }
+            
+            .textLetter h2 {
+                font-size: 20px !important;
+            }
+            
+            .textLetter .contentLetter {
+                font-size: 14px !important;
+                padding: 10px 15px !important;
+            }
+            
+            .mewmew1, .mewmew2 {
+                width: 50px;
+            }
+        }
     </style>
 
     <!-- aa2 -->
@@ -1957,11 +2034,13 @@
                 }, 14000);
             }
 
-            // Create all floating elements periodically
-            setInterval(createFloatingStar, 3000);
-            setInterval(createFloatingDiamond, 4000);
-            setInterval(createFloatingFlower, 2500);
-            setInterval(createFloatingButterfly, 5000);
+            // Create all floating elements periodically (only on larger screens)
+            if (window.innerWidth > 375) {
+                setInterval(createFloatingStar, 3000);
+                setInterval(createFloatingDiamond, 4000);
+                setInterval(createFloatingFlower, 2500);
+                setInterval(createFloatingButterfly, 5000);
+            }
 
             // Sound control
             let soundEnabled = true;
@@ -2216,7 +2295,7 @@
         // chữ của thư bạn muốn gửi
         let indexTextContent = 0;
         let textLetterContent = document.querySelector('.contentLetter');
-        const textLetterP = "Ngày 20/10 — Lớp 12D xin gửi những lời chúc ngọt ngào nhất đến cô và các bạn nữ.Chúc mọi người luôn xinh đẹp, mạnh mẽ, rực rỡ như những bông hoa đang nở giữa thanh xuân 🌸Cảm ơn vì đã mang đến cho 12D thật nhiều năng lượng, tiếng cười và những kỷ niệm đáng nhớ 💕Chúc cô và các bạn luôn hạnh phúc, thành công trên hành trình của mình ✨ — Với tất cả yêu thương, 12D — 20/10/2025 💖";
+        const textLetterP = "Ngày 20/10 — Em xin gửi những lời chúc ngọt ngào nhất đến Cô và các bạn Nữ. Chúc mọi người luôn xinh đẹp, mạnh mẽ, rực rỡ như những bông hoa đang nở giữa thanh xuân 🌸Cảm ơn vì đã mang đến cho 12D thật nhiều năng lượng, tiếng cười và những kỷ niệm đáng nhớ 💕Chúc cô và các bạn luôn hạnh phúc, thành công trên hành trình của mình ✨ — Với tất cả yêu thương, 12D — 20/10/2025 💖";
         
         let timoutTextLetterContent;
         function textCharLetterContent() {
