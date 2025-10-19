@@ -5,7 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>women's day</title>
+    <title>Love 12D</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="./avatar.webp">
+    <link rel="shortcut icon" type="image/webp" href="./avatar.webp">
+    <link rel="apple-touch-icon" href="./avatar.webp">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap-grid.min.css"
         integrity="sha512-JQksK36WdRekVrvdxNyV3B0Q1huqbTkIQNbz1dlcFVgNynEMRl0F8OSqOGdVppLUDIvsOejhr/W5L3G/b3J+8w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -446,6 +451,127 @@
             }
             50% {
                 transform: translateY(-5px);
+            }
+        }
+
+        /* Music Permission Popup */
+        .music-permission-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            animation: popupFadeIn 0.5s ease-out;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffd1ff 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 192, 203, 0.5);
+            max-width: 400px;
+            margin: 20px;
+            animation: popupSlideIn 0.5s ease-out;
+        }
+
+        .popup-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        .popup-content h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+        }
+
+        .popup-content p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+            color: #8b4513;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            transform: translateY(40px);
+        }
+
+        .btn-allow, .btn-deny {
+            font-family: 'Dancing Script', cursive;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-allow {
+            background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-allow:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-deny {
+            background: linear-gradient(45deg, #95a5a6, #bdc3c7);
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-deny:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(149, 165, 166, 0.4);
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popupSlideIn {
+            from {
+                transform: translateY(-50px) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
             }
         }
     </style>
@@ -1655,6 +1781,19 @@
 
     </div>
 
+    <!-- Music Permission Popup -->
+    <div class="music-permission-popup" id="musicPermissionPopup">
+        <div class="popup-content">
+            <div class="popup-icon">🎵</div>
+            <h3>Bật nhạc nền?</h3>
+            <p>Trang web có nhạc nền đẹp, bạn có muốn phát không?</p>
+            <div class="popup-buttons">
+                <button class="btn-allow" onclick="allowMusic()">🎵 Có, phát nhạc</button>
+                <button class="btn-deny" onclick="denyMusic()">🔇 Không, tắt nhạc</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Made with love by Mavrixdev -->
     <div class="made-with-love">
         Made with ❤️ by Mavrixdev
@@ -1881,15 +2020,31 @@
                 }
             }
 
-            // Try to play music immediately when page loads
+            // Show music permission popup when page loads
             window.addEventListener('load', function() {
-                setTimeout(enableMusic, 1000); // Wait 1 second after page loads
+                setTimeout(showMusicPermission, 1500); // Wait 1.5 seconds after page loads
             });
 
             // Also try when DOM is ready
             document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(enableMusic, 500); // Wait 0.5 seconds after DOM ready
+                setTimeout(showMusicPermission, 1000); // Wait 1 second after DOM ready
             });
+
+            // Show music permission popup
+            function showMusicPermission() {
+                const popup = document.getElementById('musicPermissionPopup');
+                if (popup) {
+                    popup.style.display = 'flex';
+                }
+            }
+
+            // Hide music permission popup
+            function hideMusicPermission() {
+                const popup = document.getElementById('musicPermissionPopup');
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            }
 
             setTimeout(() => {
                 document.querySelector("#text-click").style.display = "inherit";
@@ -2137,6 +2292,53 @@
             autoplay: true,
         });
 
+    </script>
+
+    <!-- Music Permission Functions -->
+    <script>
+        // Allow music function
+        function allowMusic() {
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const soundButton = document.getElementById('soundButton');
+            
+            // Enable music
+            backgroundMusic.muted = false;
+            backgroundMusic.play().catch(e => {
+                console.log('Music play failed:', e);
+            });
+            
+            // Update sound button
+            soundButton.innerHTML = '🔊';
+            soundButton.classList.remove('muted');
+            
+            // Hide popup
+            hideMusicPermission();
+        }
+
+        // Deny music function
+        function denyMusic() {
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const soundButton = document.getElementById('soundButton');
+            
+            // Disable music
+            backgroundMusic.muted = true;
+            soundEnabled = false;
+            
+            // Update sound button
+            soundButton.innerHTML = '🔇';
+            soundButton.classList.add('muted');
+            
+            // Hide popup
+            hideMusicPermission();
+        }
+
+        // Hide music permission popup
+        function hideMusicPermission() {
+            const popup = document.getElementById('musicPermissionPopup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }
     </script>
 </body>
 
